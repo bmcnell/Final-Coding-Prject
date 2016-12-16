@@ -1,8 +1,14 @@
 package rocket.app.view;
 
 import eNums.eAction;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import rocket.app.MainApp;
 import rocketCode.Action;
 import rocketData.LoanRequest;
@@ -10,8 +16,35 @@ import rocketData.LoanRequest;
 public class MortgageController {
 
 	private MainApp mainApp;
+
+	@FXML
+	private TextField txtIncome;	
+	@FXML
+	private TextField txtExpenses;	
+	@FXML
+	private TextField txtCreditScore;	
+	@FXML
+	private TextField txtHouseCost;
 	
-	//	TODO - RocketClient.RocketMainController
+	ObservableList<String> options = 
+		    FXCollections.observableArrayList(
+		        "15 years",
+		        "30 years");
+	@FXML
+	private final ComboBox comboBox = new ComboBox(options);
+	@FXML
+	private Button btnMortgagePayment;
+
+	@FXML
+	private Label lblIncome;
+	@FXML
+	private Label lblExpenses;
+	@FXML
+	private Label lblCreditScore;
+	@FXML
+	private Label lblHouseCost;
+
+	//	RocketClient.RocketMainController
 	
 	//	Create private instance variables for:
 	//		TextBox  - 	txtIncome
