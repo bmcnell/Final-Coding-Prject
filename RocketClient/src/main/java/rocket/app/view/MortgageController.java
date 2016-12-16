@@ -26,12 +26,13 @@ public class MortgageController {
 	@FXML
 	private TextField txtHouseCost;
 	
-	ObservableList<String> options = 
-		    FXCollections.observableArrayList(
-		        "15 years",
-		        "30 years");
-	@FXML
-	private final ComboBox comboBox = new ComboBox(options);
+    @FXML
+    private final ComboBox comboBox = new ComboBox();
+    comboBox.getItems().addAll(
+        "15 years",
+        "30 years"
+    ); 
+    
 	@FXML
 	private Button btnMortgagePayment;
 
