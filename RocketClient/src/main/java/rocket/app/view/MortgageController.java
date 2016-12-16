@@ -1,5 +1,7 @@
 package rocket.app.view;
 
+import java.text.DecimalFormat;
+
 import eNums.eAction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,12 +28,14 @@ public class MortgageController {
 	@FXML
 	private TextField txtHouseCost;
 	
+	//combo box with items added??? third try
     @FXML
-    private final ComboBox comboBox = new ComboBox();
-    comboBox.getItems().addAll(
-        "15 years",
-        "30 years"
-    ); 
+    private ComboBox cmbTerm;
+	@FXML
+	private void initialize(){
+		cmbTerm.getItems().removeAll(cmbTerm.getItems());
+		cmbTerm.getItems().addAll("15","30");
+}
     
 	@FXML
 	private Button btnMortgagePayment;
@@ -44,6 +48,8 @@ public class MortgageController {
 	private Label lblCreditScore;
 	@FXML
 	private Label lblHouseCost;
+	@FXML
+	private Label lblMortgagePayment;
 
 	//	RocketClient.RocketMainController
 	
@@ -62,17 +68,23 @@ public class MortgageController {
 	}
 	
 	
-	//	TODO - RocketClient.RocketMainController
+	//	RocketClient.RocketMainController
 	//			Call this when btnPayment is pressed, calculate the payment
 	@FXML
 	public void btnCalculatePayment(ActionEvent event)
 	{
 		Object message = null;
-		//	TODO - RocketClient.RocketMainController
+		// RocketClient.RocketMainController
 		
 		Action a = new Action(eAction.CalculatePayment);
 		LoanRequest lq = new LoanRequest();
-		//	TODO - RocketClient.RocketMainController
+		lblMortgagePayment.setText("");
+		lq.setIncome(Double.parseDouble(txtIncome.getText()));
+		lq.setExpenses(Double.parseDouble(txtExpenses.getText()));
+		lq.setiCreditScore(Integer.parseInt(txtCreditScore.getText()));
+		lq.setdAmount(Double.parseDouble(txtHouseCost.getText()));
+		lq.setiTerm(Integer.parseInt((String)cmbTerm.getSelectionModel().getSelectedItem()));
+		//	RocketClient.RocketMainController
 		//			set the loan request details...  rate, term, amount, credit score, downpayment
 		//			I've created you an instance of lq...  execute the setters in lq
 
@@ -84,7 +96,25 @@ public class MortgageController {
 	
 	public void HandleLoanRequestDetails(LoanRequest lRequest)
 	{
-		//	TODO - RocketClient.HandleLoanRequestDetails
+		double payment;
+		double PITI28;
+		double PITI36;
+		
+		payment = lRequest.getdPayment();
+		
+		PITI28 = lRequest.getIncome() / 12 * 0.28;
+		PITI36 = (lRequest.getIncome()/12 * 0.36) - lRequest.getExpenses();
+		
+		// PITI calculations (from above) returns lowest as PITI
+		double PITI = (PITI28<PITI36 ? PITI28 : PITI36);
+		
+		DecimalFormat df = new DecimalFormat("###.##");
+		
+		if (PITI>payment){
+			lblMortgagePayment.setText("Monthly Mortgage Payment: "+ df.format(payment));
+		} else{
+			lblMortgagePayment.setText("House Cost too High"); }
+		//	RocketClient.HandleLoanRequestDetails
 		//			lRequest is an instance of LoanRequest.
 		//			after it's returned back from the server, the payment (dPayment)
 		//			should be calculated.
